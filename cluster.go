@@ -770,7 +770,6 @@ func (c *clusterClient) doretry(
 }
 
 func (c *clusterClient) BuildCrossSlotMGETs(ctx context.Context, keys []string) ([]Completed, error) {
-	return nil, errors.New("cross slot MGET is not supported in this version of valkey-go")
 	if !c.opt.EnableCrossSlotMGET {
 		return nil, errors.New("cross slot MGET is not enabled")
 	}
