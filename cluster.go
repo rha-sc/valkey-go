@@ -779,7 +779,7 @@ func (c *clusterClient) BuildCrossSlotMGETs(ctx context.Context, keys []string) 
 		keyCount int
 	}
 
-	commandsMap := make(map[conn][]cmdEntry)
+	commandsMap := make(map[conn][]*cmdEntry)
 
 	const maxKeysPerMGET = 16
 	for _, key := range keys {
@@ -794,9 +794,9 @@ func (c *clusterClient) BuildCrossSlotMGETs(ctx context.Context, keys []string) 
 
 		cmdList := commandsMap[conn]
 		if len(cmdList) == 0 || cmdList[len(cmdList)-1].keyCount >= maxKeysPerMGET {
-			cmdList = append(cmdList, cmdEntry{cmd: c.cmd.Arbitrary("MGET"), keyCount: 0})
+			cmdList = append(cmdList, &cmdEntry{cmd: c.cmd.Arbitrary("MGET"), keyCount: 0})
 		}
-		last := &cmdList[len(cmdList)-1]
+		last := cmdList[len(cmdList)-1]
 		last.cmd.Args(key)
 		last.keyCount++
 		commandsMap[conn] = cmdList
